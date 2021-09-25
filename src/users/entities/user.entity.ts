@@ -1,5 +1,8 @@
 import { Gender } from "src/global/app.enum";
-import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { UserProfile } from '../../user-profiles/entities/user-profile.entity';
+import { Department } from '../../departments/entities/department.entity';
+import { Role } from "src/roles/entities/role.entity";
 
 @Entity()
 export class User {
@@ -15,6 +18,9 @@ export class User {
 
     @Column()
     lastName: string;
+
+    @Column({ nullable: true })
+    commonName: string;
 
     @Column({ nullable: true })
     homeAddress: string;
@@ -102,4 +108,19 @@ export class User {
     // /* for refresh token save after successful login*/
     // @Column({ select: false, nullable: true })
     // public refreshTokenHash: string;
+
+    // **RELATIONSHIPS** //
+    @OneToOne( () => UserProfile, userProfile => userProfile.user, {cascade: true} )
+    userProfile: UserProfile;
+
+    @Column({ nullable: true })
+    departmentId: number; 
+
+    @ManyToOne( () => Department, department => department.users )
+    @JoinColumn( {name: 'departmentId' })
+    department: Department;
+
+    @ManyToMany( () => Role, role => role.users)
+    roles: Role[];
+
 }
