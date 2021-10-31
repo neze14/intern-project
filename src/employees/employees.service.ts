@@ -93,4 +93,33 @@ export class EmployeesService {
     }
   }
 
+  /**RELATIONSHIPS */
+  async setDepartmentById(employeeId: number, departmentId: number): Promise<void> {
+    try {
+      return await this .employeeRepository.createQueryBuilder()
+        .relation(Employee, 'department')
+        .of(employeeId)
+        .set(departmentId)
+    } catch(error) {
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error: `There was a problem setting department with employee id: ${error.meessage}`
+      }, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+  }
+
+  async unsetDepartmentById(employeeId: number): Promise<void> {
+    try {
+      return await this .employeeRepository.createQueryBuilder()
+        .relation(Employee, 'department')
+        .of(employeeId)
+        .set(null)
+    } catch(error) {
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error: `There was a problem unsetting department with employee id: ${error.meessage}`
+      }, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+  }
+
 }

@@ -17,6 +17,12 @@ export class UsersService {
 
   ) { }
 
+  /**
+   * Creates a new user
+   * @param createUserDto 
+   * @param req 
+   * @returns 
+   */
   async create(createUserDto: CreateUserDto, req: any): Promise<User> {
     try {
       const newUser = this.userRepository.create(createUserDto);
@@ -131,7 +137,10 @@ export class UsersService {
       .of(userId)
       .add(roleId)
     } catch(error){
-
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error: `There was a problem adding the role with user id: ${error.meessage}`
+      }, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -142,7 +151,10 @@ export class UsersService {
       .of(userId)
       .add(roleIds)
     } catch(error){
-      
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error: `There was a problem adding roles with user id: ${error.meessage}`
+      }, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -153,7 +165,10 @@ export class UsersService {
       .of(userId)
       .remove(roleId)
     } catch(error){
-
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error: `There was a problem removing the role with user id: ${error.meessage}`
+      }, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -164,7 +179,10 @@ export class UsersService {
       .of(userId)
       .remove(roleIds)
     } catch(error){
-      
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error: `There was a problem removing roles with user id: ${error.meessage}`
+      }, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -174,7 +192,12 @@ export class UsersService {
       .relation(User, "userProfile")
       .of(userId)
       .set(userProfileId)
-    }catch(error){}
+    }catch(error){
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error: `There was a problem setting user-profile with user id: ${error.meessage}`
+      }, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
   }
 
   async unsetUserProfileById(userId: number): Promise<void> {
@@ -183,7 +206,40 @@ export class UsersService {
       .relation(User, "userProfile")
       .of(userId)
       .set(null)
-    }catch(error){}
+    }catch(error){
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error: `There was a problem usettinng user-profile with user id: ${error.meessage}`
+      }, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+  }
+
+  async setEmployeeById(userId: number, employeeId: number): Promise<void> {
+    try{
+      return await this.userRepository.createQueryBuilder()
+      .relation(User, "employee")
+      .of(userId)
+      .set(employeeId)
+    }catch(error){
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error: `There was a problem setting employee with user id: ${error.meessage}`
+      }, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+  }
+  
+  async unsetEmployeeById(userId: number): Promise<void> {
+    try{
+      return await this.userRepository.createQueryBuilder()
+      .relation(User, "employee")
+      .of(userId)
+      .set(null)
+    }catch(error){
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error: `There was a problem unsetting employee with user id: ${error.meessage}`
+      }, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
   }
 
 }

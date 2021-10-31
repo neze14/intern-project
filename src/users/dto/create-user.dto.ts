@@ -8,6 +8,7 @@ export class CreateUserDto {
      * This is the first name of the user, Shoukd not be more than 20 characters
      * @example Chineze
      */
+    @ApiProperty()
     readonly firstName: string;
     readonly middleName?: string;
     readonly lastName: string;

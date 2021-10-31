@@ -3,6 +3,7 @@ import { Column, Entity, Index, JoinColumn, ManyToMany, ManyToOne, OneToOne, Pri
 import { UserProfile } from '../../user-profiles/entities/user-profile.entity';
 import { Department } from '../../departments/entities/department.entity';
 import { Role } from "src/roles/entities/role.entity";
+import { Employee } from "src/employees/entities/employee.entity";
 
 @Entity()
 export class User {
@@ -110,17 +111,13 @@ export class User {
     // public refreshTokenHash: string;
 
     // **RELATIONSHIPS** //
-    @OneToOne( () => UserProfile, userProfile => userProfile.user, {cascade: true} )
+    @OneToOne( () => UserProfile, userProfile => userProfile.user, {cascade: true} ) //cascade links creation of both user and userProfile. Both will also be deleted if one is deleted
     userProfile: UserProfile;
-
-    @Column({ nullable: true })
-    departmentId: number; 
-
-    @ManyToOne( () => Department, department => department.users )
-    @JoinColumn( {name: 'departmentId' })
-    department: Department;
 
     @ManyToMany( () => Role, role => role.users)
     roles: Role[];
+
+    @OneToOne( () => Employee, employee => employee.user)// no cascade here because an employee may not be user
+    employee: Employee;
 
 }

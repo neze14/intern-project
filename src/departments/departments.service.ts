@@ -96,4 +96,62 @@ export class DepartmentsService {
       }, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
+
+  /**RELATIONSHIPS */
+  async addEmployeeById(departmentId: number, employeeId: number): Promise<void> {
+    try{ 
+      return await this.departmentRepository.createQueryBuilder()
+        .relation(Department, "employee")
+        .of(departmentId)
+        .add(employeeId)
+    } catch (error) {
+      throw new HttpException ({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error:`There was a problem adding the employee with department id: ${error.meessage}`
+      }, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+  }
+
+  async addEmployeesById(departmentId: number, employeeIds: number[]): Promise<void> {
+    try{ 
+      return await this.departmentRepository.createQueryBuilder()
+        .relation(Department, "employees")
+        .of(departmentId)
+        .add(employeeIds)
+    } catch (error) {
+      throw new HttpException ({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error:`There was a problem adding employees with department id: ${error.meessage}`
+      }, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+  }
+
+  async removeEmployeeById(departmentId: number, employeeId: number): Promise<void> {
+    try{ 
+      return await this.departmentRepository.createQueryBuilder()
+        .relation(Department, "employee")
+        .of(departmentId)
+        .remove(employeeId)
+    } catch (error) {
+      throw new HttpException ({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error:`There was a problem removing the employee with department id: ${error.meessage}`
+      }, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+  }
+
+  async removeEmployeesById(departmentId: number, employeeIds: number[]): Promise<void> {
+    try{ 
+      return await this.departmentRepository.createQueryBuilder()
+        .relation(Department, "employees")
+        .of(departmentId)
+        .remove(employeeIds)
+    } catch (error) {
+      throw new HttpException ({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error:`There was a problem removing employees with department id: ${error.meessage}`
+      }, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+  }
+
 }

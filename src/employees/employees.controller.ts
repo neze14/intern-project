@@ -33,4 +33,16 @@ export class EmployeesController {
   remove(@Param('id') id: string) {
     return this.employeesService.remove(+id);
   }
+
+  /**RELATIONSHIPS */
+  @Patch(':employeeId/departments/:departmentId')
+  setDepartmentById(@Param('employeeId') employeeId: string, @Param('departmentId') departmentId: string): Promise<void> {
+    return this.employeesService.setDepartmentById(+employeeId, +departmentId)
+  }
+
+  @Delete(':employeeId/departments')
+  unsetDepartmentById(@Param('employeeId')employeeId: string): Promise<void> {
+    return this.employeesService.unsetDepartmentById(+employeeId)
+  }
+
 }
