@@ -20,7 +20,6 @@ export const logger = winston.createLogger({
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
 
   //await app.init()
 
@@ -34,6 +33,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
 
   SwaggerModule.setup('api', app, document); // the swagger URL is thus /api
+
+  await app.listen(3000);
 
   logger.info(`Application is running on: ${await app.getUrl()}`)
 }
